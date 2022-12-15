@@ -8,4 +8,4 @@ const userSchema = new Schema({
 
 userSchema.plugin(uniqueValidator)
 
-module.exports = model('User', userSchema)
+export default model('User', userSchema)

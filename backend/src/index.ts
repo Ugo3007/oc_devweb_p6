@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import userController from "./controllers/user.controller"
 
 const app = express()
+app.use(express.json())
 
 dotenv.config();
 dotenv.config({path: `.env.local`, override: true});
