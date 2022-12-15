@@ -1,5 +1,9 @@
 import express from "express";
+
+// @ts-ignore
 import bcrypt from "bcrypt";
+// @ts-ignore
+import jwt from "jsonwebtoken"
 
 import User from "../models/User.model"
 
@@ -26,8 +30,29 @@ router.post('/signup', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-    return res.status(200).json({message: ''})
+    User.findOne({email: req.body.email})
+        .then(user => {
+            if (user === null) {
+                res.status(401).json({message: 'Invalid credentials'})
+            } else {
+                bcrypt.compare(req.body.password, user.password)
+                    .then((valid: boolean) => {
+                        if (!valid) {
+                            res.status(401).json({message: 'Invalid credentials'})
+                        } else {
+                            res.status(200).json({userId: user._id, token: jwt.sign(
+                                    {userId: user._id},
+                                    process.env.JWT_SECRET_KEY as string,
+                                    {expiresIn: '24h'}
+                                )})
+                        }
+                    })
+                    .catch((error: any) => {
+                        res.status(500).json({error})
+                    })
+            }
+        })
+        .catch(error => res.status(500).json({error}));
 })
-
 
 export default router
