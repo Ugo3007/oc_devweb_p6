@@ -1,28 +1,29 @@
 import express from "express";
+import auth from "../middlewares/auth"
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
     return res.status(200).json({message: "Route not implemented"})
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', auth, (req, res) => {
     return res.status(200).json({message: "Route not implemented"})
 })
 
-router.post('/', (req, res) => {
+router.post('/', auth, (req, res) => {
     return res.status(200).json({message: "Route not implemented"})
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', auth, (req, res) => {
     return res.status(200).json({message: "Route not implemented"})
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', auth, (req, res) => {
     return res.status(200).json({message: "Route not implemented"})
 })
 
-router.post('/:id/like', (req, res) => {
+router.post('/:id/like', auth, (req, res) => {
     return res.status(200).json({message: "Route not implemented"})
 })
 

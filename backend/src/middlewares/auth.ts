@@ -3,7 +3,7 @@ import {Request, Response, NextFunction} from 'express';
 
 import Authorization from "../types/authorization"
 
-module.exports = (req: Request, res: Response, next: NextFunction) => {
+export default (req: Request, res: Response, next: NextFunction) => {
     if (req.headers.authorization?.split(' ')[1] !== undefined) {
         try {
             const token = req.headers.authorization.split(' ')[1];
