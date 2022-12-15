@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 
 import userController from "./controllers/user.controller"
+import path from "path";
 
 const app = express()
 app.use(express.json())
@@ -15,7 +16,7 @@ mongoose.connect('mongodb+srv://' + process.env.MONGOOSE_USERNAME + ':' + proces
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 app.use('/api/auth', userController)
-
+app.use('/src/images', express.static(path.join(__dirname, 'images')))
 
 app.listen(3000, () => {
     console.log("Connecté")
