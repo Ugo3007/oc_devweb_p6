@@ -1,8 +1,6 @@
 import express from "express";
 
-// @ts-ignore
 import bcrypt from "bcrypt";
-// @ts-ignore
 import jwt from "jsonwebtoken"
 
 import User from "../models/User.model"
