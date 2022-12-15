@@ -16,7 +16,6 @@ dependencies:
 
 devDependencies:
   '@types/express': 4.17.15
-  '@types/mongoose': 5.11.97
   '@types/node': 18.11.15
   ts-node: 10.9.1_ewfw2lwfc3dwdvz7r6yz2ssqyi
   typescript: 4.9.4
