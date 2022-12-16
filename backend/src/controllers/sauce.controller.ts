@@ -43,8 +43,7 @@ router.delete('/:id', auth, (req, res) => {
                     return res.status(401).json({message: 'Forbidden access'})
                 } else {
                     const filename = sauce.imageUrl.split('/images/')[1];
-                    // TODO : changer
-                    Sauce.deleteOne({_id: req.params._id})
+                    Sauce.deleteOne({_id: req.params.id})
                         .then(() => {
                             fs.unlink(`images/${filename}`, () => {
                             })
