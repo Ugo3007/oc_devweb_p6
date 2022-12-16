@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', userController)
 app.use('/api/sauces', sauceController)
-app.use('/src/images', express.static(path.join(__dirname, 'images')))
+app.use('/src/images', express.static(path.join(__dirname, './images')))
 
 app.listen(3000, () => {
     console.log("Connecté")

@@ -28,8 +28,23 @@ router.get('/:id', auth, (req, res) => {
 })
 
 router.post('/', auth, multer, (req, res) => {
-    return res.status(200).json({message: "Route not implemented"})
-})
+        const sauceObject = JSON.parse(req.body.sauce)
+        delete sauceObject.userId
+        const sauce = new Sauce({
+            ...sauceObject,
+            dislikes: 0,
+            imageUrl: `${req.protocol}://${req.get('host')}/src/images/${req.file?.filename}`,
+            likes: 0,
+            userId: req.auth.userId,
+            usersDisliked: [],
+            usersLiked: [],
+        })
+        console.log('coucou')
+        sauce.save()
+            .then(() => res.status(201).json({message: "Objet enregistré"}))
+            .catch((error) => res.status(400).json({error}))
+    }
+)
 
 router.put('/:id', auth, multer, (req, res) => {
     return res.status(200).json({message: "Route not implemented"})
