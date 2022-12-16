@@ -16,6 +16,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
         } catch (error) {
             return res.status(401).json({error: 'Forbidden Access'})
         }
+    } else {
+        return res.status(401).json({error: 'No Authorization Token'})
     }
-    return res.status(401).json({error: 'No Authorization Token'})
 }
