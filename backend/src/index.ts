@@ -27,6 +27,4 @@ app.use('/api/auth', userController)
 app.use('/api/sauces', sauceController)
 app.use('/images', express.static(path.join(__dirname, '../images')))
 
-app.listen(3000, () => {
-    console.log("Connecté")
-})
+export default app
