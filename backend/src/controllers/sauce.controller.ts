@@ -62,7 +62,7 @@ router.put('/:id', auth, multer, (req, res) => {
         .then(sauce => {
             if (sauce === null) return res.status(404).json({message: 'Sauce not found'})
             if (sauce.userId !== req.auth.userId) {
-                res.status(401).json({message: 'Forbidden access'})
+                res.status(403).json({message: 'Forbidden access'})
             } else {
                 Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
                     .then(() => {
@@ -89,7 +89,7 @@ router.delete('/:id', auth, (req, res) => {
         .then((sauce) => {
             if (sauce !== null) {
                 if (sauce.userId !== req.auth.userId) {
-                    return res.status(401).json({message: 'Forbidden access'})
+                    return res.status(403).json({message: 'Forbidden access'})
                 } else {
                     const filename = sauce.imageUrl.split('/images/')[1];
                     fs.unlink(`images/${filename}`, () => {
