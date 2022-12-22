@@ -41,7 +41,7 @@ router.post('/', auth, multer, (req, res) => {
         })
         sauce.save()
             .then(() => {
-                return res.status(201).json({message: "Objet enregistré"})
+                return res.status(201).json({message: "Object saved"})
             })
             .catch((error) => {
                 return res.status(400).json({error})
@@ -62,7 +62,7 @@ router.put('/:id', auth, multer, (req, res) => {
         .then(sauce => {
             if (sauce === null) return res.status(404).json({message: 'Sauce not found'})
             if (sauce.userId !== req.auth.userId) {
-                res.status(403).json({message: 'Forbidden access'})
+                return res.status(403).json({message: 'Forbidden access'})
             } else {
                 Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
                     .then(() => {
@@ -72,7 +72,7 @@ router.put('/:id', auth, multer, (req, res) => {
                                 console.log('Picture successfully deleted')
                             })
                         }
-                        res.status(200).json({message: 'Objet modifié !'})
+                        return res.status(200).json({message: 'Object modified'})
                     })
                     .catch(error => {
                         return res.status(400).json({error})
@@ -95,9 +95,11 @@ router.delete('/:id', auth, (req, res) => {
                     fs.unlink(`images/${filename}`, () => {
                         Sauce.deleteOne({_id: req.params.id})
                             .then(() => {
-                                return res.status(204).json({message: "Objet supprimé."})
+                                return res.status(204).json({message: "Object deleted"})
                             })
-                            .catch(error => res.status(401).json({error}))
+                            .catch(error => {
+                                return res.status(401).json({error})
+                            })
                     })
                 }
             } else {
@@ -138,18 +140,17 @@ router.post('/:id/like', auth, (req, res) => {
                         break
                     case -1:
                         if (sauce.usersDisliked.includes(userId)) {
-                            return res.status(409).json({message: 'User has already liked the sauce'})
+                            return res.status(409).json({message: 'User has already disliked the sauce'})
                         }
                         sauce.usersDisliked.push(userId)
                         sauce.dislikes = sauce.usersDisliked.length
                         break
                     default:
-                        res.status(406).json({message: 'like is not equal to 1, 0 or -1'})
-                        break
+                        return res.status(406).json({message: 'Like is not equal to 1, 0 or -1'})
                 }
                 Sauce.updateOne({_id: req.params.id}, sauce)
                     .then(() => {
-                        return res.status(200).json({message: 'Objet modifié !'})
+                        return res.status(200).json({message: 'Object modified'})
                     })
                     .catch(error => {
                         return res.status(400).json({error})
@@ -157,7 +158,7 @@ router.post('/:id/like', auth, (req, res) => {
             }
         })
         .catch((error) => {
-            res.status(400).json({error: error})
+            return res.status(400).json({error: error})
         })
 })
 
