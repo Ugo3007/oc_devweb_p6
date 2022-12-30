@@ -4,6 +4,7 @@ import multer from "../middlewares/multer-config";
 
 import Sauce from "../models/Sauce.model"
 import * as fs from "fs";
+import completeRequestValidator from "../middlewares/completeRequestValidator";
 
 const router = express.Router()
 
@@ -27,7 +28,7 @@ router.get('/:id', auth, (req, res) => {
         })
 })
 
-router.post('/', auth, multer, (req, res) => {
+router.post('/', auth, multer, completeRequestValidator, (req, res) => {
         const sauceObject = JSON.parse(req.body.sauce)
         delete sauceObject.userId
         const sauce = new Sauce({
@@ -49,7 +50,7 @@ router.post('/', auth, multer, (req, res) => {
     }
 )
 
-router.put('/:id', auth, multer, (req, res) => {
+router.put('/:id', auth, multer, completeRequestValidator,(req, res) => {
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -125,6 +126,10 @@ router.post('/:id/like', auth, (req, res) => {
                         if (sauce.usersLiked.includes(userId)) {
                             return res.status(409).json({message: 'User has already liked the sauce'})
                         }
+                        if (sauce.usersDisliked.includes(userId)) {
+                            sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(userId), 1)
+                            sauce.dislikes = sauce.usersDisliked.length
+                        }
                         sauce.usersLiked.push(userId)
                         sauce.likes = sauce.usersLiked.length
                         break
@@ -141,6 +146,10 @@ router.post('/:id/like', auth, (req, res) => {
                     case -1:
                         if (sauce.usersDisliked.includes(userId)) {
                             return res.status(409).json({message: 'User has already disliked the sauce'})
+                        }
+                        if (sauce.usersLiked.includes(userId)) {
+                            sauce.usersLiked.splice(sauce.usersLiked.indexOf(userId), 1)
+                            sauce.likes = sauce.usersLiked.length
                         }
                         sauce.usersDisliked.push(userId)
                         sauce.dislikes = sauce.usersDisliked.length
